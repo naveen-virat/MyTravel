@@ -62,7 +62,8 @@ jobs:
 
         # Build Angular project
         cd MyTravelAngular
-        npm ci
+        rm -rf node_modules package-lock.json
+        npm install --legacy-peer-deps
         npm run build
         cd ..
 

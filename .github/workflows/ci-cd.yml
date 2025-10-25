@@ -22,7 +22,9 @@ jobs:
       run: dotnet restore MyTravelAPIServices/MyTravelAPIServices.csproj
 
     - name: Build
-      run: dotnet build MyTravelAPIServices/MyTravelAPIServices.csproj --no-restore --configuration Release  frontend-test:
+      run: dotnet build MyTravelAPIServices/MyTravelAPIServices.csproj --no-restore --configuration Release
+
+  frontend-test:
     runs-on: ubuntu-latest
     name: Frontend Tests (Angular)
 
@@ -39,7 +41,13 @@ jobs:
     - name: Install dependencies
       run: |
         cd MyTravelAngular
-        npm ci
+        rm -rf node_modules package-lock.json
+        npm install --legacy-peer-deps
+
+    - name: Install Chrome for testing
+      run: |
+        cd MyTravelAngular
+        npx puppeteer browsers install chrome
 
     - name: Build
       run: |
@@ -49,7 +57,9 @@ jobs:
     - name: Test
       run: |
         cd MyTravelAngular
-        npm run test -- --watch=false --browsers=ChromeHeadless  docker-build:
+        npm run test -- --watch=false --browsers=ChromeHeadless
+
+  docker-build:
     runs-on: ubuntu-latest
     name: Docker Build Test
     needs: [backend-test, frontend-test]
