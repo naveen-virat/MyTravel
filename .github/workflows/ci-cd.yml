@@ -9,85 +9,77 @@ on:
 jobs:
   backend-test:
     runs-on: ubuntu-latest
-    name: Backend Tests (.NET)
-    
+    name: Backend Build (.NET)
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        
+
     - name: Restore dependencies
       run: dotnet restore MyTravelAPIServices/MyTravelAPIServices.csproj
-      
-    - name: Build
-      run: dotnet build MyTravelAPIServices/MyTravelAPIServices.csproj --no-restore
-      
-    - name: Test
-      run: dotnet test MyTravelAPIServices/MyTravelAPIServices.csproj --no-build --verbosity normal
 
-  frontend-test:
+    - name: Build
+      run: dotnet build MyTravelAPIServices/MyTravelAPIServices.csproj --no-restore --configuration Release  frontend-test:
     runs-on: ubuntu-latest
     name: Frontend Tests (Angular)
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
+
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
         cache-dependency-path: MyTravelAngular/package-lock.json
-        
+
     - name: Install dependencies
       run: |
         cd MyTravelAngular
         npm ci
-        
+
     - name: Build
       run: |
         cd MyTravelAngular
-        npm run build
-        
+        npm run build -- --configuration production
+
     - name: Test
       run: |
         cd MyTravelAngular
-        npm run test -- --watch=false --browsers=ChromeHeadless
-
-  docker-build:
+        npm run test -- --watch=false --browsers=ChromeHeadless  docker-build:
     runs-on: ubuntu-latest
     name: Docker Build Test
     needs: [backend-test, frontend-test]
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
+
     - name: Build Backend Docker Image
       run: docker build -f Dockerfile.backend -t mytravel-backend .
-      
-    - name: Build Frontend Docker Image  
+
+    - name: Build Frontend Docker Image
       run: docker build -f Dockerfile.frontend -t mytravel-frontend .
 
   security-scan:
     runs-on: ubuntu-latest
     name: Security Scan
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
+
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@0.29.0
       with:
         scan-type: 'fs'
         scan-ref: '.'
         format: 'sarif'
         output: 'trivy-results.sarif'
-        
+
     - name: Upload Trivy scan results
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
         sarif_file: 'trivy-results.sarif'

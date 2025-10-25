@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
 
 import { PaymentComponent } from './payment.component';
+import { UserLayoutComponent } from '../layouts/user-layout/user-layout.component';
 
 describe('PaymentComponent', () => {
   let component: PaymentComponent;
@@ -8,7 +12,15 @@ describe('PaymentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PaymentComponent ]
+      declarations: [
+        PaymentComponent,
+        UserLayoutComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FormsModule
+      ]
     })
     .compileComponents();
   }));

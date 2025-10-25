@@ -11,6 +11,20 @@ namespace MyTravel.Services
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            // Add security headers
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(365);
+            });
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 443;
+            });
             
             // Configure Swagger with detailed documentation
             services.AddSwaggerGen(c =>
@@ -48,9 +62,10 @@ namespace MyTravel.Services
             
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.AllowAnyOrigin()
+                builder.WithOrigins("http://localhost:4200", "http://localhost:80", "http://localhost")
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
             }));
         }
 
@@ -66,19 +81,31 @@ namespace MyTravel.Services
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyTravel API v1");
-                    c.RoutePrefix = string.Empty; // Makes Swagger UI available at root URL
+                    c.RoutePrefix = "swagger"; // Changed from root to /swagger for security
                     c.DocumentTitle = "MyTravel API Documentation";
                     c.DefaultModelsExpandDepth(-1); // Disable swagger schemas at bottom
                     c.DisplayRequestDuration();
+                    c.EnableTryItOutByDefault();
                 });
             }
-            //else{
-            //    app.UseHsts();
-            //}
+            else
+            {
+                app.UseHsts();
+            }
             
             app.UseCors("MyPolicy");
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+
+            // Add security headers
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers["X-Frame-Options"] = "SAMEORIGIN";
+                context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+                context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+                context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+                await next();
+            });
 
             app.UseRouting();
 

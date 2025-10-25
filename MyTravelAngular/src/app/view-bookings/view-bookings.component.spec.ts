@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ViewBookingsComponent } from './view-bookings.component';
+import { UserLayoutComponent } from '../layouts/user-layout/user-layout.component';
 
 describe('ViewBookingsComponent', () => {
   let component: ViewBookingsComponent;
@@ -8,7 +11,14 @@ describe('ViewBookingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewBookingsComponent ]
+      declarations: [
+        ViewBookingsComponent,
+        UserLayoutComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ]
     })
     .compileComponents();
   }));

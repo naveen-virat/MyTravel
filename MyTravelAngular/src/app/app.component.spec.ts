@@ -1,4 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -7,6 +8,9 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      imports: [
+        RouterTestingModule
+      ]
     }).compileComponents();
   }));
 
@@ -22,10 +26,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('TravelAwayApp');
   });
 
-  it('should render title', () => {
+  it('should render router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('TravelAwayApp app is running!');
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });

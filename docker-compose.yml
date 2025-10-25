@@ -25,6 +25,7 @@ services:
     container_name: mytravel-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=TravelAwayDB;User Id=sa;Password=MyTravel123!;TrustServerCertificate=true
     ports:
       - "8080:8080"

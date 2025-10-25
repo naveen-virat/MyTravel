@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
 
 import { EditDetailsComponent } from './edit-details.component';
+import { CommonLayoutComponent } from '../layouts/common-layout/common-layout.component';
+import { UserLayoutComponent } from '../layouts/user-layout/user-layout.component';
 
 describe('EditDetailsComponent', () => {
   let component: EditDetailsComponent;
@@ -8,7 +13,16 @@ describe('EditDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditDetailsComponent ]
+      declarations: [
+        EditDetailsComponent,
+        CommonLayoutComponent,
+        UserLayoutComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FormsModule
+      ]
     })
     .compileComponents();
   }));
