@@ -16,11 +16,11 @@ namespace MyTravelDAL.Models
         public int NumberOfChildren { get; set; }
         public DateTime DateOfTravel { get; set; }
         public Decimal TotalAmount { get; set; }
-        public string HotelName { get; set; }
-        public string PlacesToVisit { get; set; }
+        public string? HotelName { get; set; }
+        public string? PlacesToVisit { get; set; }
         public int NoOfDays { get; set; }
         public int NoOfRooms { get; set; }
         public int NoOfNights { get; set; }
-        public string PackageName { get; set; }
+        public string? PackageName { get; set; }
     }
 }

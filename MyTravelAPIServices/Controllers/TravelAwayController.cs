@@ -82,7 +82,7 @@ namespace TravelAwayServices.Controllers
         [ProducesResponseType(500)]
         public JsonResult GetPackages()
         {
-            List<Package> packageList;
+            List<Package>? packageList;
             try
             {
                 packageList = repository.GetPackages();
@@ -98,7 +98,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetCustomerDetails(string emailId)
         {
-            Customer customer;
+            Customer? customer;
             try
             {
                 customer = repository.GetCustomerById(emailId);
@@ -115,7 +115,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetPackageCategories()
         {
-            List<PackageCategory> packageCategoriesList;
+            List<PackageCategory>? packageCategoriesList;
             try
             {
                 packageCategoriesList = repository.GetPackageCategories();
@@ -131,7 +131,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetPackagesByCategoryId(int categoryId)
         {
-            List<Package> packageList;
+            List<Package>? packageList;
             try
             {
                 packageList = repository.GetPackageByCategoryId(categoryId);
@@ -147,7 +147,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetPackageDetailsByPackageId(string packageId)
         {
-            List<PackageDetail> packageDetails;
+            List<PackageDetail>? packageDetails;
             try
             {
                 int Id = Convert.ToInt32(packageId);
@@ -164,7 +164,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetCustomerByEmail(string emailId)
         {
-            Customer cust;
+            Customer? cust;
             try
             {
                 cust = repository.GetCustomerById(emailId);
@@ -180,7 +180,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetAccomodationByBookingId(string bookingId)
         {
-            Accomodation accObj;
+            Accomodation? accObj;
             try
             {
                 int Id = Convert.ToInt32(bookingId);
@@ -213,7 +213,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetHotelRatingsByCity(string city)
         {
-            List<int> ratings;
+            List<int>? ratings;
             try
             {
                 ratings = repository.GetHotelRatingByCity(city);
@@ -229,7 +229,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetHotelsByCityAndRating(string city, string rating)
         {
-            List<string> hotels;
+            List<string>? hotels;
             try
             {
                 int val = Convert.ToInt32(rating);
@@ -280,7 +280,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult ViewBookedPackages(string email)
         {
-            List<ViewBookings> bookings;
+            List<ViewBookings>? bookings;
             try
             {
 
@@ -298,7 +298,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetHotels()
         {
-            List<Hotel> hotels;
+            List<Hotel>? hotels;
             try
             {
 
@@ -315,7 +315,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetVehicles()
         {
-            List<Vehicle> vehicles;
+            List<Vehicle>? vehicles;
             try
             {
 
@@ -333,7 +333,7 @@ namespace TravelAwayServices.Controllers
         [HttpGet]
         public JsonResult GetCityByPackageDetailsId(string bookingId)
         {
-            string city;
+            string? city;
             try
             {
                 int pkgDetId = Convert.ToInt32(bookingId);

@@ -50,7 +50,7 @@ namespace TravelAwayDAL
                     return result;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 result = -99;
                 return result;
@@ -115,7 +115,7 @@ namespace TravelAwayDAL
             return status;
         }
 
-        public List<Package> GetPackages()
+        public List<Package>? GetPackages()
         {
             List<Package> package;
             try
@@ -130,7 +130,7 @@ namespace TravelAwayDAL
             return package;
         }
 
-        public Customer GetCustomerById(string email)
+        public Customer? GetCustomerById(string email)
         {
             Customer cust;
             try
@@ -148,7 +148,7 @@ namespace TravelAwayDAL
             return cust;
         }
 
-        public List<PackageCategory> GetPackageCategories()
+        public List<PackageCategory>? GetPackageCategories()
         {
             {
                 List<PackageCategory> obj = null;
@@ -166,7 +166,7 @@ namespace TravelAwayDAL
 
         }
 
-        public List<Vehicle> GetVehicles()
+        public List<Vehicle>? GetVehicles()
         {
             {
                 List<Vehicle> obj = null;
@@ -184,7 +184,7 @@ namespace TravelAwayDAL
 
         }
 
-        public List<Hotel> GetHotels()
+        public List<Hotel>? GetHotels()
         {
             {
                 List<Hotel> obj = null;
@@ -202,7 +202,7 @@ namespace TravelAwayDAL
 
         }
 
-        public List<Package> GetPackageByCategoryId(int categoryId)
+        public List<Package>? GetPackageByCategoryId(int categoryId)
         {
             List<Package> obj = null;
             try
@@ -217,7 +217,7 @@ namespace TravelAwayDAL
             return obj;
         }
 
-        public List<PackageDetail> GetPackageDetailsByPackageId(int packageId)
+        public List<PackageDetail>? GetPackageDetailsByPackageId(int packageId)
         {
             List<PackageDetail> obj = null;
             try
@@ -258,7 +258,7 @@ namespace TravelAwayDAL
             return roleId;
         }
 
-        public Accomodation GetAccomodationByBookingId(int bookingId)
+        public Accomodation? GetAccomodationByBookingId(int bookingId)
         {
             Accomodation obj = null;
             try
@@ -362,7 +362,7 @@ namespace TravelAwayDAL
 
 
         //Accommodation selection
-        public string GetCitiesByPackageDetailsId(int bookId)
+        public string? GetCitiesByPackageDetailsId(int bookId)
         {
             string city = null;
             int? pkgid = 0;
@@ -380,7 +380,7 @@ namespace TravelAwayDAL
             return city;
         }
 
-        public List<int> GetHotelRatingByCity(string city)
+        public List<int>? GetHotelRatingByCity(string city)
         {
             List<int> rating = null;
             try
@@ -397,7 +397,7 @@ namespace TravelAwayDAL
             return rating;
         }
 
-        public List<string> GetHotelsByCityAndRating(string city, int rating)
+        public List<string>? GetHotelsByCityAndRating(string city, int rating)
         {
             List<string> hotels = null;
             try
@@ -552,7 +552,7 @@ namespace TravelAwayDAL
             return total;
         }
 
-        public List<ViewBookings> ViewBookedPackages(string emailId)
+        public List<ViewBookings>? ViewBookedPackages(string emailId)
         {
             List<ViewBookings> result = null;
 
