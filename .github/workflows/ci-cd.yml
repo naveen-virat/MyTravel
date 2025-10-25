@@ -1,0 +1,93 @@
+name: MyTravel CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    name: Backend Tests (.NET)
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore MyTravelAPIServices/MyTravelAPIServices.csproj
+      
+    - name: Build
+      run: dotnet build MyTravelAPIServices/MyTravelAPIServices.csproj --no-restore
+      
+    - name: Test
+      run: dotnet test MyTravelAPIServices/MyTravelAPIServices.csproj --no-build --verbosity normal
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    name: Frontend Tests (Angular)
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: MyTravelAngular/package-lock.json
+        
+    - name: Install dependencies
+      run: |
+        cd MyTravelAngular
+        npm ci
+        
+    - name: Build
+      run: |
+        cd MyTravelAngular
+        npm run build
+        
+    - name: Test
+      run: |
+        cd MyTravelAngular
+        npm run test -- --watch=false --browsers=ChromeHeadless
+
+  docker-build:
+    runs-on: ubuntu-latest
+    name: Docker Build Test
+    needs: [backend-test, frontend-test]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Backend Docker Image
+      run: docker build -f Dockerfile.backend -t mytravel-backend .
+      
+    - name: Build Frontend Docker Image  
+      run: docker build -f Dockerfile.frontend -t mytravel-frontend .
+
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scan
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'

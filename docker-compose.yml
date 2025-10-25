@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # SQL Server Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mytravel-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyTravel123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./DBScript.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mytravel-network
+
+  # .NET Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: mytravel-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=TravelAwayDB;User Id=sa;Password=MyTravel123!;TrustServerCertificate=true
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver
+    networks:
+      - mytravel-network
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: mytravel-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - mytravel-network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  mytravel-network:
+    driver: bridge
